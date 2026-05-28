@@ -1,0 +1,36 @@
+# Keil / 编译产物
+Output/
+bin/
+*.o
+*.d
+*.axf
+*.hex
+*.map
+*.lst
+*.lnp
+*.crf
+*.dep
+*.bak
+*.ddk
+*.edk
+*.__i
+build_log.txt
+
+# Keil 个人配置（文件名含 Windows 用户名）
+*.uvguix*
+*.uvopt*
+*.uvoptx
+*.uvgui
+
+# IDE / AI 工具配置（含本机绝对路径）
+.claude/
+.vscode/
+
+# 其他
+RTE/
+keilkill.bat
+
+# 正点原子第三方说明
+Drivers/readme.txt
+Drivers/SYSTEM/readme.txt
+DebugConfig/
