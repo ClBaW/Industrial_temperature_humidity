@@ -1,7 +1,7 @@
 <!--
  * @Author: ClBaW
  * @Date: 2026-09-09 15:20:56
- * @LastEditTime: 2026-09-09 15:20:56
+ * @LastEditTime: 2026-09-09 15:38:25
 -->
 # 工业温湿度监测系统（STM32F407 + OTA）
 
@@ -40,7 +40,7 @@
 | 主控 | STM32F407ZGT6 | 主控制器，运行业务逻辑与界面 |
 lvgl
 | 显示屏 | 3.5寸触摸屏（ST7789） 使用FSMC并口| LVGL 图形交互、数据展示 |
-| SRAM || 如果显示缓冲区放在内部就可以不需要 |
+| SRAM | 1MB | 如果显示缓冲区放在内部就可以不需要 |
 wifi
 | Wi-Fi 模块 | 拼夕夕ESP8266或者正点原子的也行（AT 固件） | 联网、OTA 固件下载 |
 | RS485 收发器 | TP485E | 电平转换，Modbus 总线通信 |
@@ -48,10 +48,14 @@ wifi
 ota
 | 外置 Flash | NW25Q128 | OTA 固件存储 |
 | EEPROM | AT24C02 | 参数与配置存储 |
-
 | 调试器 | ST-Link  | 程序下载与在线调试 |
 
 具体引脚分配见相关初始化配置即可
+
+## 硬件屏幕更改->软件输出输入更改 
+更改 \Middlewares\LVGL\lvgl\examples\portin\lv_port_disp_template_ClBaW和lv_port_indev_template_ClBaW
+lv_port_disp_template_ClBaW     输出 也就是屏幕配置
+lv_port_indev_template_ClBaW    输入 也就是触摸屏配置
 
 ## 软件架构
 
@@ -70,7 +74,7 @@ FreeRTOS 任务划分（`User/RTOS_TASK.c`）：
 
 1. **Modbus-RTU 采集**：多从机轮询温湿度传感器，CRC16 校验，可扩展设备。
 2. **LVGL 图形界面**：三页交互（首页数据总览、告警状态、参数设置），自定义中文字体（16/36/48px），控件按需刷新。
-3. **OTA 远程升级**：ESP8266 联网后连接升级服务器，接收固件写入 W25Q128，校验完成后跳转升级；配合独立的 Bootloader（`OTA/` 工程）实现断点续升级与失败回滚。
+3. **OTA 远程升级**：ESP8266 联网后连接升级服务器，接收固件写入 W25Q128，校验完成后跳转升级；配合独立的 Bootloader（`OTA/` 工程）实现断点续升级与失败回滚。 可实现断电和断网不变转
 4. **参数持久化**：WiFi 名称/密码、服务器地址、报警上下限等存入 24C02 EEPROM，掉电不丢失。
 5. **报警功能**：温湿度超上限/下限告警，设备在线/离线状态检测。
 
